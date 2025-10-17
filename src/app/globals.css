@@ -1,0 +1,189 @@
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 228 10% 97%; /* #f2f3f7 ugbekun-white */
+    --foreground: 222 70% 22%; /* #122B5E ugbekun-blue-dark */
+    
+    --card: 228 10% 100%;
+    --card-foreground: 222 70% 22%;
+
+    --popover: 228 10% 97%;
+    --popover-foreground: 222 70% 22%;
+
+    --primary: 222 70% 22%; /* ugbekun-blue-dark */
+    --primary-foreground: 228 10% 97%;
+
+    --secondary: 229 100% 92%; /* ugbekun-blue-light */
+    --secondary-foreground: 222 70% 22%;
+    
+    --muted: 229 100% 92%;
+    --muted-foreground: 222 70% 42%;
+    
+    --accent: 229 100% 92%;
+    --accent-foreground: 222 70% 22%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 229 100% 92%; /* ugbekun-blue-light/20 */
+    --input: 229 100% 92%;
+    --ring: 229 100% 80%;
+
+    --radius: 0.75rem;
+
+    /* New colors from dashboard design */
+    --ugbekun-blue-dark: 222 70% 22%;
+    --ugbekun-blue-light: 229 100% 80%;
+    --ugbekun-white: 228 10% 97%;
+  }
+
+  .dark {
+    --background: 222 70% 22%; /* ugbekun-blue-dark */
+    --foreground: 228 10% 97%; /* ugbekun-white */
+    
+    --card: 222 70% 25%; /* Slightly lighter than background */
+    --card-foreground: 228 10% 97%;
+
+    --popover: 222 70% 22%;
+    --popover-foreground: 228 10% 97%;
+
+    --primary: 229 100% 80%; /* ugbekun-blue-light */
+    --primary-foreground: 222 70% 22%;
+
+    --secondary: 222 70% 28%;
+    --secondary-foreground: 228 10% 97%;
+
+    --muted: 222 70% 28%; /* Darker muted tone */
+    --muted-foreground: 228 10% 80%; /* Lighter muted foreground */
+    
+    --accent: 222 70% 28%;
+    --accent-foreground: 228 10% 97%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 222 70% 30%; /* Subtle border color */
+    --input: 222 70% 28%;
+    --ring: 229 100% 80%;
+
+    --ugbekun-blue-dark: 222 70% 22%;
+    --ugbekun-blue-light: 229 100% 80%;
+    --ugbekun-white: 228 10% 97%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground antialiased selection:bg-secondary selection:text-foreground;
+    font-family: 'Inter', sans-serif;
+  }
+
+  /* Calendar styling */
+  .rdp {
+    @apply p-0;
+  }
+  .rdp-month {
+    @apply space-y-4;
+  }
+  .rdp-caption {
+    @apply flex justify-center pt-1 relative items-center;
+  }
+  .rdp-caption_label {
+    @apply text-base font-semibold tracking-tight;
+  }
+  .rdp-nav {
+    @apply space-x-1 flex items-center;
+  }
+  .rdp-nav_button {
+    @apply h-8 w-8 bg-transparent p-0 opacity-50 hover:opacity-100;
+  }
+  .rdp-nav_button_previous {
+    @apply absolute left-1;
+  }
+  .rdp-nav_button_next {
+    @apply absolute right-1;
+  }
+  .rdp-table {
+    @apply w-full border-collapse space-y-1 table-fixed;
+  }
+  .rdp-head_row {
+    @apply flex;
+  }
+  .rdp-head_cell {
+    @apply text-muted-foreground rounded-md flex-1 font-normal text-[0.8rem];
+  }
+  .rdp-row {
+    @apply flex w-full mt-2;
+  }
+  .rdp-cell {
+    @apply flex-1 text-center text-sm p-0 relative focus-within:relative focus-within:z-20;
+  }
+  .rdp-day {
+    @apply h-full aspect-square w-full p-0 font-normal aria-selected:opacity-100 rounded-lg transition-colors hover:bg-accent;
+  }
+  .rdp-day_selected {
+    @apply bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground focus:bg-primary focus:text-primary-foreground;
+  }
+  .rdp-day_today {
+    @apply bg-accent text-accent-foreground;
+  }
+  .dark .rdp-day_today:not(.rdp-day_selected) {
+    @apply bg-primary/20 text-primary font-semibold;
+  }
+  .rdp-day_outside {
+    @apply text-muted-foreground opacity-50;
+  }
+}
+
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+  }
+}
+
+@layer base {
+  /* Custom Scrollbar */
+  ::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+  }
+  ::-webkit-scrollbar-track {
+    background: hsl(var(--background));
+  }
+  ::-webkit-scrollbar-thumb {
+    background-color: hsl(var(--muted));
+    border-radius: 6px;
+    border: 3px solid hsl(var(--background));
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: hsl(var(--muted-foreground) / 0.5);
+  }
+  .dark ::-webkit-scrollbar-thumb {
+    background-color: hsl(var(--muted) / 0.7);
+  }
+  .dark ::-webkit-scrollbar-thumb:hover {
+    background-color: hsl(var(--muted-foreground) / 0.7);
+  }
+}
