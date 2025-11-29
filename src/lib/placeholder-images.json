@@ -1,0 +1,172 @@
+{
+  "placeholderImages": [
+    {
+      "id": "hero-student",
+      "description": "Smiling student in blue uniform",
+      "imageUrl": "https://i.postimg.cc/hvBqPYvs/aggreh.png",
+      "imageHint": "student uniform"
+    },
+    {
+      "id": "testimonial-1",
+      "description": "Avatar for a testimonial provider.",
+      "imageUrl": "https://i.pravatar.cc/40?img=15",
+      "imageHint": "professional headshot woman"
+    },
+    {
+      "id": "testimonial-2",
+      "description": "Avatar for a testimonial provider.",
+      "imageUrl": "https://i.pravatar.cc/40?img=5",
+      "imageHint": "teacher portrait man"
+    },
+    {
+      "id": "testimonial-3",
+      "description": "Avatar for a testimonial provider.",
+      "imageUrl": "https://i.pravatar.cc/40?img=11",
+      "imageHint": "professional photo woman"
+    },
+    {
+      "id": "testimonial-4",
+      "description": "Avatar for a testimonial provider.",
+      "imageUrl": "https://i.pravatar.cc/40?img=32",
+      "imageHint": "school admin portrait"
+    },
+    {
+      "id": "testimonial-5",
+      "description": "Avatar for a testimonial provider.",
+      "imageUrl": "https://i.pravatar.cc/40?img=56",
+      "imageHint": "teacher headshot man"
+    },
+    {
+      "id": "auth-testimonial",
+      "description": "Avatar for auth page testimonial.",
+      "imageUrl": "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?q=80&w=200&auto=format&fit=crop",
+      "imageHint": "parent headshot"
+    },
+    {
+      "id": "admin-welcome",
+      "description": "Laptop illustration for admin welcome card",
+      "imageUrl": "https://i.postimg.cc/L6VhzPcS/08-Laptop.png",
+      "imageHint": "laptop illustration"
+    },
+    {
+      "id": "teacher-welcome",
+      "description": "Blackboard illustration for teacher welcome card",
+      "imageUrl": "https://i.postimg.cc/tCbYZkmD/04-Blackboard.png",
+      "imageHint": "blackboard illustration"
+    },
+    {
+      "id": "parent-welcome",
+      "description": "Book and pencil illustration for parent welcome card",
+      "imageUrl": "https://i.postimg.cc/HnDjt9WY/01-Book-n-Pencil.png",
+      "imageHint": "book pencil illustration"
+    },
+    {
+      "id": "student-welcome",
+      "description": "Graduation cap illustration for student welcome card",
+      "imageUrl": "https://i.postimg.cc/BZHjnkNX/03-Toga.png",
+      "imageHint": "graduation cap illustration"
+    },
+    {
+      "id": "course-data-structures",
+      "description": "Abstract data structures",
+      "imageUrl": "https://images.unsplash.com/photo-1642516303080-431f6681f864?q=80&w=600&auto=format&fit=crop",
+      "imageHint": "abstract data"
+    },
+    {
+      "id": "course-linear-algebra",
+      "description": "Geometric algebra representation",
+      "imageUrl": "https://images.unsplash.com/photo-1623907710909-9709639f4c1f?q=80&w=600&auto=format&fit=crop",
+      "imageHint": "geometric math"
+    },
+    {
+      "id": "course-microeconomics",
+      "description": "Supply and demand graph",
+      "imageUrl": "https://images.unsplash.com/photo-1552841287-6a0e47282441?q=80&w=600&auto=format&fit=crop",
+      "imageHint": "supply demand"
+    },
+    {
+      "id": "course-physics",
+      "description": "Newton's cradle",
+      "imageUrl": "https://images.unsplash.com/photo-1586775150049-b267df6f29c6?q=80&w=600&auto=format&fit=crop",
+      "imageHint": "newton cradle"
+    },
+    {
+      "id": "course-literature",
+      "description": "Stack of classic books",
+      "imageUrl": "https://images.unsplash.com/photo-1692742593507-5f87fae07ccf?q=80&w=600&auto=format&fit=crop",
+      "imageHint": "classic books"
+    },
+    {
+      "id": "grade-ds",
+      "description": "Abstract data structures avatar",
+      "imageUrl": "https://images.unsplash.com/photo-1510906594845-bc082582c8cc?q=80&w=100&auto=format&fit=crop",
+      "imageHint": "abstract data"
+    },
+    {
+      "id": "grade-mth",
+      "description": "Geometric math avatar",
+      "imageUrl": "https://images.unsplash.com/photo-1727522974676-c2f9c32ee692?q=80&w=100&auto=format&fit=crop",
+      "imageHint": "geometric math"
+    },
+    {
+      "id": "grade-eco",
+      "description": "Supply and demand graph avatar",
+      "imageUrl": "https://images.unsplash.com/photo-1757940059959-662478f87b72?q=80&w=100&auto=format&fit=crop",
+      "imageHint": "supply demand"
+    },
+    {
+      "id": "grade-lit",
+      "description": "Classic book avatar",
+      "imageUrl": "https://images.unsplash.com/photo-1692742593570-ca989f1febd9?q=80&w=100&auto=format&fit=crop",
+      "imageHint": "classic book"
+    },
+    {
+      "id": "msg-prof-carter",
+      "description": "Professor Carter's avatar",
+      "imageUrl": "https://i.pravatar.cc/40?img=68",
+      "imageHint": "professor portrait man"
+    },
+    {
+      "id": "msg-study-group",
+      "description": "Study group icon",
+      "imageUrl": "https://images.unsplash.com/photo-1646627927874-be8c13d0ae1a?q=80&w=100&auto=format&fit=crop",
+      "imageHint": "group icon"
+    },
+    {
+      "id": "msg-ta-mia",
+      "description": "TA Mia's avatar",
+      "imageUrl": "https://i.pravatar.cc/40?img=31",
+      "imageHint": "professional photo woman"
+    },
+    {
+      "id": "parent-child-1",
+      "description": "Aisha Bello's profile picture",
+      "imageUrl": "https://i.pravatar.cc/40?img=1",
+      "imageHint": "girl smiling"
+    },
+    {
+      "id": "parent-child-2",
+      "description": "David Okon's profile picture",
+      "imageUrl": "https://i.pravatar.cc/40?img=2",
+      "imageHint": "boy smiling"
+    },
+    {
+      "id": "teacher-avatar-1",
+      "description": "Mr. Adebayo's profile picture",
+      "imageUrl": "https://i.pravatar.cc/40?img=60",
+      "imageHint": "teacher man portrait"
+    },
+    {
+      "id": "teacher-avatar-2",
+      "description": "Mrs. Chioma's profile picture",
+      "imageUrl": "https://i.pravatar.cc/40?img=31",
+      "imageHint": "teacher woman portrait"
+    },
+    {
+      "id": "teacher-avatar-3",
+      "description": "Mr. Okoro's profile picture",
+      "imageUrl": "https://i.pravatar.cc/40?u=mr-okoro",
+      "imageHint": "teacher man"
+    }
+  ]
+}

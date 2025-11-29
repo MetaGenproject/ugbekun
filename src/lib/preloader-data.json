@@ -1,0 +1,43 @@
+
+{
+    "greetings": [
+      { "text": "Ndewo", "lang": "Igbo", "emoji": "👋" },
+      { "text": "Sannu", "lang": "Hausa", "emoji": "👋" },
+      { "text": "Ẹ n lẹ", "lang": "Yoruba", "emoji": "👋" },
+      { "text": "How far?", "lang": "Pidgin", "emoji": "👋" },
+      { "text": "Hello", "lang": "English", "emoji": "👋" },
+      { "text": "Bonjour", "lang": "French", "emoji": "👋" },
+      { "text": "Hola", "lang": "Spanish", "emoji": "👋" },
+      { "text": "Jambo", "lang": "Swahili", "emoji": "👋" },
+      { "text": "Welcome", "lang": "English", "emoji": "😊" }
+    ],
+    "quotes": [
+      { "text": "The beautiful thing about learning is that no one can take it from you.", "author": "B.B. King", "emoji": "🎓" },
+      { "text": "An investment in knowledge pays the best interest.", "author": "Benjamin Franklin", "emoji": "💰" },
+      { "text": "The only source of knowledge is experience.", "author": "Albert Einstein", "emoji": "🔬" },
+      { "text": "Education is the most powerful weapon which you can use to change the world.", "author": "Nelson Mandela", "emoji": "🌍" },
+      { "text": "Live as if you were to die tomorrow. Learn as if you were to live forever.", "author": "Mahatma Gandhi", "emoji": "✨" }
+    ],
+    "facts": [
+      { "text": "The human brain weighs about 3 pounds but uses 20% of the body's oxygen and calories.", "category": "Did you know?", "emoji": "🧠" },
+      { "text": "Nigeria is the most populous country in Africa, with over 200 million people.", "category": "Did you know?", "emoji": "🇳🇬" },
+      { "text": "There are over 500 indigenous languages spoken in Nigeria.", "category": "Did you know?", "emoji": "🗣️" },
+      { "text": "A group of owls is called a parliament.", "category": "Did you know?", "emoji": "🦉" },
+      { "text": "Honey never spoils.", "category": "Did you know?", "emoji": "🍯" }
+    ],
+    "tips": [
+      { "text": "Breaking down large tasks into smaller, manageable steps can make them seem less daunting.", "category": "Pro Tip", "emoji": "🎯" },
+      { "text": "The Pomodoro Technique—working for 25 minutes, then taking a 5-minute break—can boost focus.", "category": "Pro Tip", "emoji": "🍅" },
+      { "text": "Teaching someone else what you've learned is a great way to solidify your own understanding.", "category": "Pro Tip", "emoji": "🧑‍🏫" },
+      { "text": "Getting enough sleep is crucial for memory consolidation and learning.", "category": "Pro Tip", "emoji": "😴" }
+    ],
+    "proTips": [
+        { "path": "/admin/dashboard", "text": "Use the Quick Action buttons to instantly add a new student or schedule an event.", "category": "Dashboard Tip", "icon": "Rocket" },
+        { "path": "/admin/finance", "text": "The Finance module is part of the Growth plan. Upgrade to unlock invoicing and expense tracking.", "category": "Pro Tip", "icon": "Wallet" },
+        { "path": "/admin/students", "text": "You can add new students directly from this page using the 'Add Student' button.", "category": "Did you know?", "icon": "UserPlus" },
+        { "path": "/teacher/planner", "text": "Let AI do the heavy lifting! Describe your lesson, and a full plan will be generated for you.", "category": "AI Tip", "icon": "WandSparkles" },
+        { "path": "/student/assignments", "text": "You can add your own personal tasks and reminders alongside your official assignments.", "category": "Did you know?", "icon": "PlusCircle" },
+        { "path": "/parent/dashboard", "text": "Click on any chart to see a more detailed breakdown of your child's performance.", "category": "Pro Tip", "icon": "AreaChart" }
+    ]
+  }
+  

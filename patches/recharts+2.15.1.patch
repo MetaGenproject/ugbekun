@@ -1,0 +1,100 @@
+diff --git a/node_modules/recharts/es6/util/ReactUtils.js b/node_modules/recharts/es6/util/ReactUtils.js
+index 727c95e..a593339 100644
+--- a/node_modules/recharts/es6/util/ReactUtils.js
++++ b/node_modules/recharts/es6/util/ReactUtils.js
+@@ -1,3 +1,4 @@
++"use client";
+ /* eslint-disable import/no-unresolved */
+ 
+ /* eslint-disable no-param-reassign */
+diff --git a/node_modules/recharts/es6/util/isNeedPreserveWrapper.js b/node_modules/recharts/es6/util/isNeedPreserveWrapper.js
+index 987053e..97b2f33 100644
+--- a/node_modules/recharts/es6/util/isNeedPreserveWrapper.js
++++ b/node_modules/recharts/es6/util/isNeedPreserveWrapper.js
+@@ -1,3 +1,4 @@
++"use client";
+ /**
+  * @fileOverview
+  * @author
+diff --git a/node_modules/recharts/es6/chart/generateCategoricalChart.js b/node_modules/recharts/es6/chart/generateCategoricalChart.js
+index d6d9263..4dd23c2 100644
+--- a/node_modules/recharts/es6/chart/generateCategoricalChart.js
++++ b/node_modules/recharts/es6/chart/generateCategoricalChart.js
+@@ -1,3 +1,4 @@
++"use client";
+ /* eslint-disable max-classes-per-file */
+ 
+ /* eslint-disable react/no-did-mount-set-state */
+diff --git a/node_modules/recharts/es6/chart/ChartContext.js b/node_modules/recharts/es6/chart/ChartContext.js
+index b5db70e..430a996 100644
+--- a/node_modules/recharts/es6/chart/ChartContext.js
++++ b/node_modules/recharts/es6/chart/ChartContext.js
+@@ -1,3 +1,4 @@
++"use client";
+ /**
+  * @file
+  * The context to provide data and configuration for all rechart sub-components.
+diff --git a/node_modules/recharts/es6/component/ResponsiveContainer.js b/node_modules/recharts/es6/component/ResponsiveContainer.js
+index e386d38..046554b 100644
+--- a/node_modules/recharts/es6/component/ResponsiveContainer.js
++++ b/node_modules/recharts/es6/component/ResponsiveContainer.js
+@@ -1,3 +1,4 @@
++"use client";
+ /**
+  * @fileOverview Wrapper component to make charts adapt to the size of parent * DOM
+  * @author Camille Rabier
+diff --git a/node_modules/recharts/lib/util/ReactUtils.js b/node_modules/recharts/lib/util/ReactUtils.js
+index 978ec1d..599a9a0 100644
+--- a/node_modules/recharts/lib/util/ReactUtils.js
++++ b/node_modules/recharts/lib/util/ReactUtils.js
+@@ -1,4 +1,5 @@
+-"use strict";
++"use client";
++'use strict';
+ 
+ Object.defineProperty(exports, "__esModule", {
+   value: true
+diff --git a/node_modules/recharts/lib/util/isNeedPreserveWrapper.js b/node_modules/recharts/lib/util/isNeedPreserveWrapper.js
+index a35a51a..65ee533 100644
+--- a/node_modules/recharts/lib/util/isNeedPreserveWrapper.js
++++ b/node_modules/recharts/lib/util/isNeedPreserveWrapper.js
+@@ -1,4 +1,5 @@
+-"use strict";
++"use client";
++'use strict';
+ 
+ Object.defineProperty(exports, "__esModule", {
+   value: true
+diff --git a/node_modules/recharts/lib/chart/generateCategoricalChart.js b/node_modules/recharts/lib/chart/generateCategoricalChart.js
+index 94f1c7d..682a87b 100644
+--- a/node_modules/recharts/lib/chart/generateCategoricalChart.js
++++ b/node_modules/recharts/lib/chart/generateCategoricalChart.js
+@@ -1,4 +1,5 @@
+-"use strict";
++"use client";
++'use strict';
+ 
+ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+ Object.defineProperty(exports, "__esModule", {
+diff --git a/node_modules/recharts/lib/chart/ChartContext.js b/node_modules/recharts/lib/chart/ChartContext.js
+index a9e772e..c289098 100644
+--- a/node_modules/recharts/lib/chart/ChartContext.js
++++ b/node_modules/recharts/lib/chart/ChartContext.js
+@@ -1,4 +1,5 @@
+-"use strict";
++"use client";
++'use strict';
+ 
+ Object.defineProperty(exports, "__esModule", {
+   value: true
+diff --git a/node_modules/recharts/lib/component/ResponsiveContainer.js b/node_modules/recharts/lib/component/ResponsiveContainer.js
+index 0ce5c31..16d510f 100644
+--- a/node_modules/recharts/lib/component/ResponsiveContainer.js
++++ b/node_modules/recharts/lib/component/ResponsiveContainer.js
+@@ -1,4 +1,5 @@
+-"use strict";
++"use client";
++'use strict';
+ 
+ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+ Object.defineProperty(exports, "__esModule", {
