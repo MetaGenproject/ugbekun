@@ -16,7 +16,7 @@ const getToken = () => {
 };
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: "https://ugb2025-backend.onrender.com/",
+  baseUrl: "https://ugbekunsmp-backend.onrender.com/",
   
   prepareHeaders: async (headers) => {
     const token = getToken();
@@ -43,3 +43,4 @@ const baseQueryWithRedirect = async (args, api, extraOptions) => {
 };
 
 export default baseQueryWithRedirect;
+
