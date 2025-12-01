@@ -66,6 +66,31 @@ export function OnboardingStepAdminAccount({ form }: { form: UseFormReturn<Onboa
             </FormItem>
           )}
         />
+<<<<<<< HEAD
+=======
+        <FormField
+          control={form.control}
+          name="adminPassword"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Password</FormLabel>
+              <FormControl><Input type="password" placeholder="Create a secure password" {...field} /></FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="adminConfirmPassword"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Confirm Password</FormLabel>
+              <FormControl><Input type="password" placeholder="Confirm password" {...field} /></FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+>>>>>>> origin/new-feature
       </div>
     </section>
   );

@@ -82,7 +82,11 @@ export function Navbar() {
             ) : (
                 <>
                     <Button variant="ghost" asChild>
+<<<<<<< HEAD
                         <PreloaderLink href="/login">Sign in</PreloaderLink>
+=======
+                        <PreloaderLink href="/login">Log in</PreloaderLink>
+>>>>>>> origin/new-feature
                     </Button>
                     <Button asChild>
                     <PreloaderLink href="/onboarding">

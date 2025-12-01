@@ -7,6 +7,11 @@ import { ThemeProvider } from '@/components/theme-provider';
 import { PreloaderProvider } from '@/context/preloader-context';
 import { Preloader } from '@/components/preloader';
 import { Toaster } from '@/components/ui/toaster';
+<<<<<<< HEAD
+=======
+import { Provider } from 'react-redux';
+import { store } from './store';
+>>>>>>> origin/new-feature
 
 function PageLoadTrigger() {
   const pathname = usePathname();
@@ -19,6 +24,7 @@ function PageLoadTrigger() {
 
 export function AppProvider({ children }: { children: React.ReactNode }) {
     return (
+<<<<<<< HEAD
         <ThemeProvider
             attribute="class"
             defaultTheme="light"
@@ -34,6 +40,25 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
                 <Toaster />
             </PreloaderProvider>
         </ThemeProvider>
+=======
+        <Provider store={store}>
+            <ThemeProvider
+                attribute="class"
+                defaultTheme="light"
+                enableSystem
+                disableTransitionOnChange
+            >
+                <PreloaderProvider>
+                    <Preloader />
+                    <Suspense>
+                        <PageLoadTrigger />
+                    </Suspense>
+                    {children}
+                    <Toaster />
+                </PreloaderProvider>
+            </ThemeProvider>
+        </Provider>
+>>>>>>> origin/new-feature
     )
 }
 

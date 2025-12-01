@@ -10,7 +10,11 @@ import { Plus, MessageCircle } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { type Student, recentStudents } from "@/lib/admin-data";
+<<<<<<< HEAD
 import { AddStudentDialog } from "../admin-dashboard/add-student-dialog";
+=======
+import { AddStudentDialog } from "./add-student-dialog";
+>>>>>>> origin/new-feature
 import { usePlan } from "@/context/plan-context";
 import { Skeleton } from "../ui/skeleton";
 import { Button } from "../ui/button";
@@ -19,7 +23,11 @@ import { adminNotifications as initialAdminNotifications } from "@/lib/notificat
 import Link from "next/link";
 import { useLocalStorage } from "@/hooks/use-local-storage";
 import { useRouter } from 'next/navigation';
+<<<<<<< HEAD
 import { SendMessageDialog } from "../admin-dashboard/send-message-dialog";
+=======
+import { SendMessageDialog } from "./send-message-dialog";
+>>>>>>> origin/new-feature
 
 const SkeletonCard = () => (
     <Card className="p-6 shadow-lg flex flex-col h-[460px]">

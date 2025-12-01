@@ -105,6 +105,11 @@ export function WelcomeHeader() {
         isOpen={isAddSchoolOpen}
         onClose={() => setIsAddSchoolOpen(false)}
         onAddSchool={handleAddSchool}
+<<<<<<< HEAD
+=======
+        onUpdateSchool={() => {}}
+        schoolToEdit={null}
+>>>>>>> origin/new-feature
       />
     </>
   );
