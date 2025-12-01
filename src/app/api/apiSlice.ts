@@ -16,8 +16,13 @@ export const apiSlice = createApi({
   reducerPath: 'api',
   baseQuery: fetchBaseQuery({
     //https://ugbekunsmp-backend.onrender.com/
+<<<<<<< HEAD
     // http://localhost:5001/
     baseUrl: "https://ugbekunsmp-backend.onrender.com/",
+=======
+    //http://localhost:5001/
+    baseUrl: "https://ugbekunsmp-backend.onrender.com/", 
+>>>>>>> 56b11db (update the apislice)
     prepareHeaders: (headers) => {
       const token = getToken();
       if (token) {
