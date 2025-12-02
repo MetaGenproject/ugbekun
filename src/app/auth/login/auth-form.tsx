@@ -9,11 +9,7 @@ import { useState, useContext } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-<<<<<<< HEAD
-import { loginAction, signupAction } from "./actions";
-=======
 import { signupAction } from "./actions";
->>>>>>> origin/new-feature
 import { useTheme } from "next-themes";
 import { cn } from "@/lib/utils";
 import { Sun, Moon, Mail, Lock, Eye, EyeOff, UserRound, LockKeyhole, CheckCircle2, ShieldCheck, Settings, GraduationCap, User, Heart, Twitter, Github, HelpCircle } from "lucide-react";
@@ -63,15 +59,7 @@ const roles: { id: Role, name: string, icon: React.ReactNode }[] = [
     { id: "guardian", name: "Guardian", icon: <Heart strokeWidth="1.5" className="h-5 w-5" /> },
 ]
 
-<<<<<<< HEAD
-const testUsers: Record<Role, { email: string; password: string }> = {
-    "super-admin": { email: "superadmin@ugbekun.com", password: "password123" },
-    admin: { email: "admin@ugbekun.com", password: "password123" },
-    teacher: { email: "teacher@ugbekun.com", password: "password123" },
-    student: { email: "student@ugbekun.com", password: "password123" },
-    guardian: { email: "guardian@ugbekun.com", password: "password123" },
-};
-=======
+
 // For development reference only
 // const testUsers: Record<Role, { email: string; password: string }> = {
 //     "super-admin": { email: "superadmin@ugbekun.com", password: "password123" },
@@ -80,7 +68,6 @@ const testUsers: Record<Role, { email: string; password: string }> = {
 //     student: { email: "student@ugbekun.com", password: "password123" },
 //     guardian: { email: "guardian@ugbekun.com", password: "password123" },
 // };
->>>>>>> origin/new-feature
 
 
 export function AuthForm() {
@@ -99,13 +86,8 @@ export function AuthForm() {
   const loginForm = useForm<LoginValues>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
-<<<<<<< HEAD
-      email: testUsers["super-admin"].email,
-      password: testUsers["super-admin"].password,
-=======
       email: "",
       password: "",
->>>>>>> origin/new-feature
       role: "super-admin",
     },
   });
@@ -125,33 +107,11 @@ export function AuthForm() {
   const handleRoleChange = (role: Role) => {
       setSelectedRole(role);
       loginForm.setValue("role", role);
-<<<<<<< HEAD
-      loginForm.setValue("email", testUsers[role].email);
-      loginForm.setValue("password", testUsers[role].password);
-=======
->>>>>>> origin/new-feature
   }
 
   const handleLogin: SubmitHandler<LoginValues> = async (data) => {
     setIsLoading(true);
-<<<<<<< HEAD
-    const result = await loginAction(data);
-    if (result.success) {
-      localStorage.setItem('isLoggedIn', 'true');
-      localStorage.setItem('userRole', data.role);
-      toast({
-        variant: "success",
-        title: "Login Successful",
-        description: "Welcome back! Redirecting you now...",
-      });
-      showPreloader(result.redirectPath);
-    } else {
-      toast({ 
-        variant: "destructive", 
-        title: "Login Failed", 
-        description: result.error || "An unknown error occurred." 
-      });
-=======
+
     try {
       const result = await loginUser(data);
       if (result.success && result.token && result.user) {
@@ -183,16 +143,12 @@ export function AuthForm() {
         description: "An unexpected error occurred. Please try again." 
       });
     } finally {
->>>>>>> origin/new-feature
       setIsLoading(false);
     }
   };
   
-<<<<<<< HEAD
-=======
 
 
->>>>>>> origin/new-feature
   const handleSignup: SubmitHandler<SignupValues> = async (data) => {
       setIsLoading(true);
       const result = await signupAction({fullName: data.fullName, email: data.email, password: data.password });
