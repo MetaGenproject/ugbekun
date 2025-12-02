@@ -1,16 +1,7 @@
 
 "use client";
 
-<<<<<<< HEAD
-import { useState } from 'react';
-import { OnboardingForm } from "./onboarding-form";
-import { RoleSelection } from './role-selection';
-import { TeacherParentOnboarding } from './teacher-parent-onboarding';
-import type { UserRole } from './role-selection';
 
-export default function OnboardingPage() {
-    const [selectedRole, setSelectedRole] = useState<UserRole | null>(null);
-=======
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { OnboardingForm } from "./onboarding-form";
@@ -61,24 +52,14 @@ export default function OnboardingPage() {
             // ignore and fall back to manual selection
         }
     }, []);
->>>>>>> origin/new-feature
+
 
     const handleRoleSelect = (role: UserRole) => {
         setSelectedRole(role);
     };
 
     const handleBack = () => {
-<<<<<<< HEAD
-        setSelectedRole(null);
-    }
 
-    if (!selectedRole) {
-        return <RoleSelection onSelectRole={handleRoleSelect} />;
-    }
-
-    if (selectedRole === 'school-admin') {
-        return <OnboardingForm onBackToRoleSelection={handleBack} />;
-=======
         // No role selection screen anymore; go back to login/signup so user can choose role there.
         if (typeof window !== 'undefined') window.location.href = '/login';
     }
@@ -98,7 +79,6 @@ export default function OnboardingPage() {
 
     if (selectedRole === 'school-admin') {
         return <OnboardingForm onBackToRoleSelection={handleBack} role={selectedRole} />;
->>>>>>> origin/new-feature
     }
 
     return <TeacherParentOnboarding role={selectedRole} onBack={handleBack} />;
