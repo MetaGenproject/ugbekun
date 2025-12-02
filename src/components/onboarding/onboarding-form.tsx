@@ -11,11 +11,7 @@ import { useContext } from "react";
 import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/logo";
-<<<<<<< HEAD
-import { createSchoolAction } from "@/app/onboarding/actions";
-=======
 import { useCompleteOnboardingMutation } from "@/app/api/apiSlice";
->>>>>>> origin/new-feature
 import { OnboardingStepWelcome } from "@/components/onboarding/step-welcome";
 import { OnboardingStepSchoolIdentity } from "@/components/onboarding/step-school-identity";
 import { OnboardingStepAdminAccount } from "@/components/onboarding/step-admin-account";
