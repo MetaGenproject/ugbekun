@@ -11,11 +11,9 @@ import { useContext } from "react";
 import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/logo";
-<<<<<<< HEAD
+
 import { createSchoolAction } from "@/app/onboarding/actions";
-=======
 import { useCompleteOnboardingMutation } from "@/app/api/apiSlice";
->>>>>>> origin/new-feature
 import { OnboardingStepWelcome } from "@/components/onboarding/step-welcome";
 import { OnboardingStepSchoolIdentity } from "@/components/onboarding/step-school-identity";
 import { OnboardingStepAdminAccount } from "@/components/onboarding/step-admin-account";
@@ -41,12 +39,8 @@ const onboardingSchema = z.object({
   adminRole: z.string().min(2, "Your role is required"),
   adminEmail: z.string().email("A valid email is required"),
   adminPhone: z.string().min(5, "A valid phone number is required"),
-<<<<<<< HEAD
-=======
   adminUsername: z.string().min(2, "username is required"),
   adminPassword: z.string().min(5, "password must be more than 5 character"),
-  
->>>>>>> origin/new-feature
   curriculum: z.string().min(1, "Please select a curriculum"),
   feeStructure: z.array(z.string()).optional(),
   plan: z.enum(["Starter", "Growth", "Enterprise"]),
@@ -92,10 +86,7 @@ export function OnboardingForm({ onBackToRoleSelection }: { onBackToRoleSelectio
         adminRole: "Proprietor",
         adminEmail: "",
         adminPhone: "",
-<<<<<<< HEAD
-=======
-        // adminPassword: "",
->>>>>>> origin/new-feature
+        adminPassword: "",
         curriculum: "Nigerian National",
         feeStructure: ["Tuition", "Uniforms", "Books", "PTA Levy"],
         plan: "Growth",
@@ -104,17 +95,11 @@ export function OnboardingForm({ onBackToRoleSelection }: { onBackToRoleSelectio
     }
   });
 
-<<<<<<< HEAD
   const [isLoading, setIsLoading] = useState(false);
   const [isPaymentOpen, setIsPaymentOpen] = useState(false);
   const { toast } = useToast();
   const { showPreloader } = useContext(PreloaderContext);
-=======
-  const [isPaymentOpen, setIsPaymentOpen] = useState(false);
-  const { toast } = useToast();
-  const { showPreloader } = useContext(PreloaderContext);
   const [completeOnboarding, { isLoading, error }] = useCompleteOnboardingMutation();
->>>>>>> origin/new-feature
 
 
   const handleNext = async () => {
@@ -134,38 +119,13 @@ export function OnboardingForm({ onBackToRoleSelection }: { onBackToRoleSelectio
     if (currentStep > 0) {
       setCurrentStep(step => step - 1);
     } else {
-<<<<<<< HEAD
-        onBackToRoleSelection();
-=======
+
         // onBackToRoleSelection();
->>>>>>> origin/new-feature
     }
   };
   
   const finalizeOnboarding = async (data: OnboardingValues) => {
-<<<<<<< HEAD
-    setIsLoading(true);
-    const result = await createSchoolAction(data);
 
-    if (result.success) {
-        // This logs the new admin in
-        localStorage.setItem('isLoggedIn', 'true');
-        localStorage.setItem('userRole', 'admin');
-
-        toast({
-            variant: "success",
-            title: "Setup Complete!",
-            description: `Welcome to ${data.schoolName}. Redirecting to your dashboard.`
-        })
-        showPreloader('/admin/dashboard');
-    } else {
-        toast({
-            variant: "destructive",
-            title: "Onboarding Failed",
-            description: result.error || "An unexpected error occurred."
-        })
-        setIsLoading(false);
-=======
     try {
       await completeOnboarding(data).unwrap();
       localStorage.setItem('isLoggedIn', 'true');
@@ -183,7 +143,7 @@ export function OnboardingForm({ onBackToRoleSelection }: { onBackToRoleSelectio
             title: "Onboarding Failed",
             description: (err as any)?.data?.message || "An unexpected error occurred."
         })
->>>>>>> origin/new-feature
+
     }
   };
 
