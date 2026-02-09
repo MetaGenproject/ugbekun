@@ -9,6 +9,7 @@ import { createContext, useState, useEffect, type ReactNode, useContext } from '
 import { useLocalStorage } from '@/hooks/use-local-storage';
 import { type School, schoolsData } from '@/lib/super-admin-data';
 import { UpgradeDialog } from '@/components/layout/upgrade-dialog';
+import { useGetMySchoolQuery } from '@/app/api/apiSlice';
 
 export type Plan = "Starter" | "Growth" | "Enterprise";
 
@@ -80,29 +81,28 @@ const PlanContext = createContext<PlanContextType>({
     plan: 'Starter',
     isLoading: true,
     hasFeature: () => false,
-    openUpgradeDialog: () => {},
+    openUpgradeDialog: () => { },
     planLimits,
-    setPlan: () => {},
+    setPlan: () => { },
 });
 
 export const usePlan = () => useContext(PlanContext);
 
 export function PlanProvider({ children }: { children: ReactNode }) {
-    const [schools] = useLocalStorage<School[]>('schools', schoolsData);
+    const { data: schoolData, isLoading: schoolLoading } = useGetMySchoolQuery({});
     const [plan, setPlan] = useState<Plan>('Starter');
     const [isLoading, setIsLoading] = useState(true);
     const [isUpgradeDialogOpen, setIsUpgradeDialogOpen] = useState(false);
     const [upgradeFeature, setUpgradeFeature] = useState<keyof PlanFeatures | null>(null);
 
     useEffect(() => {
-        if (schools && schools.length > 0) {
-            setPlan(schools[0].plan);
-        } else {
-            // Default for a brand new user before school is created
-            setPlan('Starter');
+        if (!schoolLoading && schoolData?.data?.school) {
+            setPlan(schoolData.data.school.plan as Plan);
+            setIsLoading(false);
+        } else if (!schoolLoading) {
+            setIsLoading(false);
         }
-        setIsLoading(false);
-    }, [schools]);
+    }, [schoolData, schoolLoading]);
 
 
     const hasFeature = (feature: keyof PlanFeatures) => {
@@ -130,7 +130,7 @@ export function PlanProvider({ children }: { children: ReactNode }) {
     return (
         <PlanContext.Provider value={value}>
             {children}
-            <UpgradeDialog 
+            <UpgradeDialog
                 isOpen={isUpgradeDialogOpen}
                 onClose={() => setIsUpgradeDialogOpen(false)}
                 featureKey={upgradeFeature}

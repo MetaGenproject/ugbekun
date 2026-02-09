@@ -41,107 +41,117 @@ import { Input } from "../ui/input";
 import type { Staff } from "@/lib/hr-data";
 import { staff as initialStaff } from "@/lib/hr-data";
 
-const planIcons: Record<School['plan'], { icon: React.ElementType, color: string, label: string }> = {
+import { useGetSuperAdminSchoolsQuery } from "@/app/api/apiSlice";
+import { Skeleton } from "../ui/skeleton";
+
+const planIcons: Record<string, { icon: React.ElementType, color: string, label: string }> = {
   "Enterprise": { icon: Gem, color: "text-amber-500", label: "Enterprise Plan" },
   "Growth": { icon: ShieldCheck, color: "text-blue-500", label: "Growth Plan" },
   "Starter": { icon: Shield, color: "text-gray-400", label: "Starter Plan" },
 };
 
 export function SchoolsOverview() {
-  const [schools, setSchools] = useLocalStorage<School[]>('schools', initialSchoolsData);
-  const [staff, setStaff] = useLocalStorage<Staff[]>('school-staff', initialStaff);
-  const [, setSuperAdminNotifications] = useLocalStorage<Notification[]>('super-admin-notifications', superAdminNotifications);
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [editingSchool, setEditingSchool] = useState<School | null>(null);
-  const [schoolToDelete, setSchoolToDelete] = useState<School | null>(null);
+  const { data: schoolsResponse, isLoading: isSchoolsLoading } = useGetSuperAdminSchoolsQuery({});
   const [searchTerm, setSearchTerm] = useState("");
   const router = useRouter();
   const { toast } = useToast();
+
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [editingSchool, setEditingSchool] = useState<School | null>(null);
+  const [schoolToDelete, setSchoolToDelete] = useState<School | null>(null);
 
   const handleAddSchool = (
     newSchoolData: Omit<School, 'id' | 'logoUrl' | 'verified' | 'coverImageUrl'>,
     admin: { name: string, email: string }
   ) => {
-    const schoolId = newSchoolData.name.toLowerCase().replace(/\s+/g, '-');
-    const newSchool: School = {
-      id: schoolId,
-      logoUrl: `https://placehold.co/32x32/dbeafe/1e3a8a?text=${newSchoolData.name.charAt(0)}`,
-      verified: newSchoolData.system === 'SMSUP+',
-      ...newSchoolData,
-    };
-    setSchools(prev => [newSchool, ...prev]);
-
-    // Also add the admin to the staff list
-    const newAdmin: Staff = {
-        id: `stf-${Date.now()}`,
-        name: admin.name,
-        email: admin.email,
-        phone: 'N/A',
-        address: newSchool.state,
-        role: 'Administrator',
-        department: 'Administration',
-        status: 'Active',
-        avatar: `https://i.pravatar.cc/40?u=${admin.email}`,
-        salary: 200000,
-        assignedClasses: [],
-        performance: 90
-    };
-    setStaff(prev => [newAdmin, ...prev]);
-
-    const newNotification: Notification = {
-        id: Date.now(),
-        title: "New School Onboarded",
-        description: `${newSchool.name} has joined the ${newSchool.plan} plan.`,
-        icon: 'Building',
-        read: false,
-    };
-    setSuperAdminNotifications(prev => [newNotification, ...prev]);
+    // Placeholder - will implement mutation later
+    console.log('Add school:', newSchoolData, admin);
+    setIsDialogOpen(false);
+    toast({ title: 'School Added', description: 'Real backend creation pending implementation.' });
   };
-  
+
   const handleUpdateSchool = (updatedSchool: School) => {
-      setSchools(prev => prev.map(s => s.id === updatedSchool.id ? updatedSchool : s));
+    // Placeholder - will implement mutation later
+    console.log('Update school:', updatedSchool);
+    setIsDialogOpen(false);
+    toast({ title: 'School Updated', description: 'Real backend update pending implementation.' });
   };
-  
+
   const openAddDialog = () => {
-      setEditingSchool(null);
-      setIsDialogOpen(true);
+    setEditingSchool(null);
+    setIsDialogOpen(true);
   };
-  
+
   const openEditDialog = (e: React.MouseEvent, school: School) => {
-      e.stopPropagation();
-      setEditingSchool(school);
-      setIsDialogOpen(true);
+    e.stopPropagation();
+    setEditingSchool(school);
+    setIsDialogOpen(true);
   };
-  
+
   const confirmDelete = (e: React.MouseEvent, school: School) => {
-      e.stopPropagation();
-      setSchoolToDelete(school);
+    e.stopPropagation();
+    setSchoolToDelete(school);
   };
 
   const handleDelete = () => {
-    if (!schoolToDelete) return;
-    setSchools(prev => prev.filter(s => s.id !== schoolToDelete.id));
-    toast({ variant: 'destructive', title: 'School Removed', description: `${schoolToDelete.name} has been deleted.` });
+    // Placeholder - will implement mutation later
+    console.log('Delete school:', schoolToDelete);
     setSchoolToDelete(null);
+    toast({ variant: 'destructive', title: 'School Removed', description: 'Real backend deletion pending implementation.' });
   };
-  
-  const filteredSchools = schools.filter(school => 
+
+  const schools = (schoolsResponse?.schools || []).map((s: any) => ({
+    id: s._id,
+    name: s.schoolName,
+    logoUrl: s.logo || null,
+    status: s.status === 'Active' ? 'Active' : 'Inactive',
+    plan: s.plan || 'Starter',
+    students: 0, // Need backend to provide this
+    teachers: 0, // Need backend to provide this
+    revenue: s.revenue || 0,
+    rating: 5.0,
+    state: s.state,
+    lga: s.lga,
+    system: s.system || 'Standard',
+    verified: s.system === 'SMSUP+',
+  }));
+
+  const filteredSchools = (schools as School[]).filter(school =>
     school.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  if (isSchoolsLoading) {
+    return (
+      <Card className="shadow-lg h-full flex flex-col">
+        <CardHeader className="p-6">
+          <Skeleton className="h-8 w-48 mb-2" />
+          <Skeleton className="h-4 w-64" />
+        </CardHeader>
+        <CardContent className="p-6 pt-0 space-y-4">
+          <Skeleton className="h-10 w-full" />
+          <div className="space-y-2">
+            {[...Array(5)].map((_, i) => (
+              <Skeleton key={i} className="h-12 w-full" />
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <>
       <Card className="shadow-lg h-full flex flex-col">
         <CardHeader className="p-6 flex flex-row items-center justify-between">
           <div>
-              <CardTitle className="text-lg">Schools Overview</CardTitle>
-              <CardDescription>All schools on the Ugbekun platform.</CardDescription>
+            <CardTitle className="text-lg">Schools Overview</CardTitle>
+            <CardDescription>All schools on the Ugbekun platform.</CardDescription>
           </div>
           <Button onClick={openAddDialog}><PlusCircle className="h-4 w-4 mr-2" />Add School</Button>
         </CardHeader>
         <CardContent className="p-6 pt-0 flex-1 flex flex-col min-h-0">
           <div className="mb-4">
-            <Input 
+            <Input
               placeholder="Search schools..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
@@ -161,75 +171,77 @@ export function SchoolsOverview() {
               </TableHeader>
               <TableBody>
                 {filteredSchools.map((school) => {
-                  const PlanIcon = planIcons[school.plan].icon;
-                  const planColor = planIcons[school.plan].color;
-                  const planLabel = planIcons[school.plan].label;
+                  const currentPlan = (school.plan as string) || "Starter";
+                  const PlanIcon = planIcons[currentPlan]?.icon || Shield;
+                  const planColor = planIcons[currentPlan]?.color || "text-gray-400";
+                  const planLabel = planIcons[currentPlan]?.label || "Starter Plan";
 
                   return (
-                  <TableRow key={school.id} className="hover:bg-muted/50 cursor-pointer" onClick={() => router.push(`/schools/${school.id}`)}>
-                    <TableCell>
-                      <div className="flex items-center gap-3">
-                        <Avatar className="h-8 w-8">
-                          <AvatarImage src={school.logoUrl || ''} />
-                          <AvatarFallback>{school.name.charAt(0)}</AvatarFallback>
-                        </Avatar>
-                        <TooltipProvider>
-                          <Tooltip>
-                            <TooltipTrigger>
-                              <PlanIcon className={cn("h-4 w-4 shrink-0", planColor)} />
-                            </TooltipTrigger>
-                            <TooltipContent>
-                              <p>{planLabel}</p>
-                            </TooltipContent>
-                          </Tooltip>
-                        </TooltipProvider>
-                        <p className="font-medium truncate">{school.name}</p>
-                        {school.system === 'SMSUP+' && (
+                    <TableRow key={school.id} className="hover:bg-muted/50 cursor-pointer" onClick={() => router.push(`/schools/${school.id}`)}>
+                      <TableCell>
+                        <div className="flex items-center gap-3">
+                          <Avatar className="h-8 w-8">
+                            <AvatarImage src={school.logoUrl || ''} />
+                            <AvatarFallback>{school.name.charAt(0)}</AvatarFallback>
+                          </Avatar>
                           <TooltipProvider>
                             <Tooltip>
                               <TooltipTrigger>
-                                <Globe2 className="h-4 w-4 text-primary shrink-0"/>
+                                <PlanIcon className={cn("h-4 w-4 shrink-0", planColor)} />
                               </TooltipTrigger>
-                              <TooltipContent><p>SMSUP+ Enabled</p></TooltipContent>
+                              <TooltipContent>
+                                <p>{planLabel}</p>
+                              </TooltipContent>
                             </Tooltip>
                           </TooltipProvider>
-                        )}
-                      </div>
-                    </TableCell>
-                    <TableCell className="text-xs text-muted-foreground">{school.lga}, {school.state}</TableCell>
-                    <TableCell>
-                        <Badge variant={school.status === 'Active' ? 'secondary' : 'destructive'} 
+                          <p className="font-medium truncate">{school.name}</p>
+                          {school.system === 'SMSUP+' && (
+                            <TooltipProvider>
+                              <Tooltip>
+                                <TooltipTrigger>
+                                  <Globe2 className="h-4 w-4 text-primary shrink-0" />
+                                </TooltipTrigger>
+                                <TooltipContent><p>SMSUP+ Enabled</p></TooltipContent>
+                              </Tooltip>
+                            </TooltipProvider>
+                          )}
+                        </div>
+                      </TableCell>
+                      <TableCell className="text-xs text-muted-foreground">{school.lga}, {school.state}</TableCell>
+                      <TableCell>
+                        <Badge variant={school.status === 'Active' ? 'secondary' : 'destructive'}
                           className={cn(
                             school.status === 'Active' ? 'bg-green-100 text-green-800 dark:bg-green-800/20 dark:text-green-300' : ''
                           )}
                         >
                           {school.plan === 'Starter' && school.status === 'Active' ? 'Trial' : school.status}
                         </Badge>
-                    </TableCell>
-                    <TableCell>{school.students}</TableCell>
-                    <TableCell className="text-right font-medium">₦{school.revenue.toLocaleString()}</TableCell>
-                    <TableCell onClick={(e) => e.stopPropagation()}>
+                      </TableCell>
+                      <TableCell>{school.students}</TableCell>
+                      <TableCell className="text-right font-medium">₦{school.revenue.toLocaleString()}</TableCell>
+                      <TableCell onClick={(e) => e.stopPropagation()}>
                         <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                                <Button variant="ghost" size="icon" className="h-8 w-8">
-                                    <MoreHorizontal className="h-4 w-4"/>
-                                </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end">
-                                <DropdownMenuItem onClick={() => router.push(`/schools/${school.id}`)}>
-                                  <ExternalLink className="mr-2 h-4 w-4"/> View Public Profile
-                                </DropdownMenuItem>
-                                <DropdownMenuItem onClick={(e) => openEditDialog(e, school)}>
-                                  <Edit className="mr-2 h-4 w-4"/> Edit Details
-                                </DropdownMenuItem>
-                                <DropdownMenuItem onClick={(e) => confirmDelete(e, school)} className="text-destructive focus:text-destructive">
-                                  <Trash2 className="mr-2 h-4 w-4"/> Delete School
-                                </DropdownMenuItem>
-                            </DropdownMenuContent>
+                          <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" size="icon" className="h-8 w-8">
+                              <MoreHorizontal className="h-4 w-4" />
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end">
+                            <DropdownMenuItem onClick={() => router.push(`/schools/${school.id}`)}>
+                              <ExternalLink className="mr-2 h-4 w-4" /> View Public Profile
+                            </DropdownMenuItem>
+                            <DropdownMenuItem onClick={(e) => openEditDialog(e, school)}>
+                              <Edit className="mr-2 h-4 w-4" /> Edit Details
+                            </DropdownMenuItem>
+                            <DropdownMenuItem onClick={(e) => confirmDelete(e, school)} className="text-destructive focus:text-destructive">
+                              <Trash2 className="mr-2 h-4 w-4" /> Delete School
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
                         </DropdownMenu>
-                    </TableCell>
-                  </TableRow>
-                )})}
+                      </TableCell>
+                    </TableRow>
+                  )
+                })}
               </TableBody>
             </Table>
           </ScrollArea>

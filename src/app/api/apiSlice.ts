@@ -4,10 +4,10 @@ const getToken = () => {
   try {
     if (typeof window === 'undefined') return null;
     if (!window.localStorage || typeof window.localStorage.getItem !== 'function') return null;
-    return window.localStorage.getItem('Token');
+    return window.localStorage.getItem('token');
   } catch (err) {
     // eslint-disable-next-line no-console
-    console.warn('Unable to read Token from localStorage:', err);
+    console.warn('Unable to read token from localStorage:', err);
     return null;
   }
 };
@@ -21,10 +21,16 @@ export const apiSlice = createApi({
     baseUrl: "https://ugbekunsmp-backend.onrender.com/",
 =======
     //http://localhost:5001/
+<<<<<<< HEAD
     baseUrl: "https://ugbekunsmp-backend.onrender.com/", 
 >>>>>>> 56b11db (update the apislice)
+=======
+    baseUrl: "http://localhost:5001",
+    credentials: 'include', // Enable cookies to be sent with requests
+>>>>>>> 9b74db9 (fix the superadmin and admin side)
     prepareHeaders: (headers) => {
       const token = getToken();
+      // Only set Authorization header if token exists in localStorage (backward compatibility)
       if (token) {
         headers.set('authorization', `Bearer ${token}`);
       }
@@ -68,7 +74,12 @@ export const apiSlice = createApi({
         method: 'POST',
         body: credentials,
       }),
-    }), 
+    }),
+
+    getMe: builder.query({
+      query: () => 'api/auth/me',
+      providesTags: ["CurrentUser"],
+    }),
 
     signup: builder.mutation({
       query: (userData) => ({
@@ -137,7 +148,7 @@ export const apiSlice = createApi({
     searchSchools: builder.query({
       query: (params) => {
         const searchParams = new URLSearchParams();
-        
+
         Object.entries(params).forEach(([key, value]) => {
           if (value !== undefined && value !== null) {
             if (Array.isArray(value)) {
@@ -162,11 +173,97 @@ export const apiSlice = createApi({
       query: () => 'api/onboarding/user/role-stats',
       providesTags: ["User"],
     }),
+
+    // School endpoints
+    getMySchool: builder.query({
+      query: () => 'api/schools/my-school',
+      providesTags: ["School"],
+    }),
+
+    getDashboardStats: builder.query({
+      query: () => 'api/schools/dashboard-stats',
+      providesTags: ["School"],
+    }),
+
+    getPlatformStats: builder.query({
+      query: () => 'api/superadmin/platform-stats',
+      providesTags: ["School", "User"],
+    }),
+
+    getSuperAdminSchools: builder.query({
+      query: () => 'api/superadmin/getschools',
+      providesTags: ["School"],
+    }),
+
+    // Student endpoints
+    getStudents: builder.query({
+      query: () => 'api/students',
+      providesTags: ["User", "School"],
+    }),
+
+    addStudent: builder.mutation({
+      query: (studentData) => ({
+        url: 'api/students',
+        method: 'POST',
+        body: studentData,
+      }),
+      invalidatesTags: ["User", "School"],
+    }),
+
+    updateStudent: builder.mutation({
+      query: ({ id, ...studentData }) => ({
+        url: `api/students/${id}`,
+        method: 'PUT',
+        body: studentData,
+      }),
+      invalidatesTags: ["User", "School"],
+    }),
+
+    deleteStudent: builder.mutation({
+      query: (id) => ({
+        url: `api/students/${id}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: ["User", "School"],
+    }),
+
+    // Event endpoints
+    getEvents: builder.query({
+      query: () => 'api/events',
+      providesTags: ["School"],
+    }),
+
+    addEvent: builder.mutation({
+      query: (eventData) => ({
+        url: 'api/events',
+        method: 'POST',
+        body: eventData,
+      }),
+      invalidatesTags: ["School"],
+    }),
+
+    updateEvent: builder.mutation({
+      query: ({ id, ...eventData }) => ({
+        url: `api/events/${id}`,
+        method: 'PUT',
+        body: eventData,
+      }),
+      invalidatesTags: ["School"],
+    }),
+
+    deleteEvent: builder.mutation({
+      query: (id) => ({
+        url: `api/events/${id}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: ["School"],
+    }),
   }),
 });
 
-export const { 
-  useLoginMutation, 
+export const {
+  useLoginMutation,
+  useGetMeQuery,
   useSignupMutation,
   useCompleteOnboardingMutation,
   useCreateSchoolMutation,
@@ -178,6 +275,18 @@ export const {
   useSearchSchoolsQuery,
   useGetAllSchoolsQuery,
   useGetRoleStatisticsQuery,
+  useGetMySchoolQuery,
+  useGetDashboardStatsQuery,
+  useGetPlatformStatsQuery,
+  useGetSuperAdminSchoolsQuery,
+  useGetStudentsQuery,
+  useAddStudentMutation,
+  useUpdateStudentMutation,
+  useDeleteStudentMutation,
+  useGetEventsQuery,
+  useAddEventMutation,
+  useUpdateEventMutation,
+  useDeleteEventMutation,
 } = apiSlice;
 
 export default apiSlice;

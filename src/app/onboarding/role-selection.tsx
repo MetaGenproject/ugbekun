@@ -1,6 +1,5 @@
 
 "use client";
-
 import { Logo } from "@/components/logo";
 
 export type UserRole = 'school-admin' | 'teacher' | 'parent';

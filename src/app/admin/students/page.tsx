@@ -47,12 +47,20 @@ import { useRouter } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
-import * as DataStore from "@/lib/data-store";
+import {
+  useGetStudentsQuery,
+  useAddStudentMutation,
+  useUpdateStudentMutation,
+  useDeleteStudentMutation
+} from "@/app/api/apiSlice";
 import { SendMessageDialog } from "@/components/admin-dashboard/send-message-dialog";
 
 function StudentsPageContent() {
-  const [students, setStudents] = useState<Student[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const { data: studentsResponse, isLoading: isGetLoading } = useGetStudentsQuery({});
+  const [addStudent] = useAddStudentMutation();
+  const [updateStudent] = useUpdateStudentMutation();
+  const [deleteStudent] = useDeleteStudentMutation();
+
   const [isAddStudentOpen, setIsAddStudentOpen] = useState(false);
   const [editingStudent, setEditingStudent] = useState<Student | null>(null);
   const { hasFeature, openUpgradeDialog, plan, planLimits } = usePlan();
@@ -62,48 +70,52 @@ function StudentsPageContent() {
   const [messagingStudent, setMessagingStudent] = useState<Student | null>(null);
   const router = useRouter();
 
-  useEffect(() => {
-      const fetchStudents = async () => {
-          const data = await DataStore.getStudents();
-          setStudents(data);
-          setIsLoading(false);
-      }
-      fetchStudents();
-  }, []);
-
+  const students = studentsResponse?.data || [];
+  const isLoading = isGetLoading;
 
   const handleAddStudent = async (newStudentData: Omit<Student, 'id' | 'avatar' | 'initials' | 'status'>) => {
-    const newStudent = await DataStore.addStudent(newStudentData);
-    setStudents(prev => [newStudent, ...prev]);
-    toast({ variant: "success", title: "Student Added", description: `${newStudent.name} has been successfully enrolled.`});
+    try {
+      const result = await addStudent(newStudentData).unwrap();
+      toast({ variant: "success", title: "Student Added", description: `${newStudentData.name} has been successfully enrolled.` });
+      return result.data; // Return the student data from backend
+    } catch (err: any) {
+      toast({ variant: "destructive", title: "Add Failed", description: err?.data?.message || "Could not add student." });
+      throw err; // Propagate to dialog
+    }
   };
-  
+
   const handleUpdateStudent = async (updatedStudentData: Omit<Student, 'id' | 'avatar' | 'initials' | 'status'>) => {
-     if (!editingStudent) return;
-     const updatedStudent = { ...editingStudent, ...updatedStudentData };
-     await DataStore.updateStudent(updatedStudent);
-     setStudents(prev => prev.map(s => s.id === editingStudent.id ? updatedStudent : s));
-     toast({
+    if (!editingStudent) return;
+    try {
+      await updateStudent({ id: editingStudent.id, ...updatedStudentData }).unwrap();
+      toast({
         variant: "success",
         title: "Student Updated",
         description: "The student's details have been saved."
-     });
+      });
+    } catch (err: any) {
+      toast({ variant: "destructive", title: "Update Failed", description: err?.data?.message || "Could not update student." });
+      throw err; // Propagate to dialog
+    }
   };
-  
+
   const confirmDeleteStudent = (student: Student) => {
     setStudentToDelete(student);
   };
 
   const handleDeleteStudent = async () => {
     if (!studentToDelete) return;
-    await DataStore.deleteStudent(studentToDelete.id);
-    setStudents(prev => prev.filter(s => s.id !== studentToDelete.id));
-    toast({
-        variant: "destructive",
+    try {
+      await deleteStudent(studentToDelete.id).unwrap();
+      toast({
+        variant: "success",
         title: "Student Removed",
         description: `${studentToDelete.name} has been removed from the list.`
-    });
-    setStudentToDelete(null);
+      });
+      setStudentToDelete(null);
+    } catch (err: any) {
+      toast({ variant: "destructive", title: "Delete Failed", description: err?.data?.message || "Could not remove student." });
+    }
   }
 
   const handleAddClick = () => {
@@ -116,10 +128,10 @@ function StudentsPageContent() {
   };
 
   const handleEditClick = (student: Student) => {
-      setEditingStudent(student);
-      setIsAddStudentOpen(true);
+    setEditingStudent(student);
+    setIsAddStudentOpen(true);
   }
-  
+
   const handleMessageClick = (e: React.MouseEvent, student: Student) => {
     e.stopPropagation();
     setMessagingStudent(student);
@@ -139,9 +151,9 @@ function StudentsPageContent() {
               <CardTitle>Students</CardTitle>
             </div>
             <div className="flex gap-2">
-                <Button variant="outline" onClick={() => toast({description: "Import from CSV feature coming soon!"})}>
-                    <FileDown className="mr-2 h-4 w-4" /> Import
-                </Button>
+              <Button variant="outline" onClick={() => toast({ description: "Import from CSV feature coming soon!" })}>
+                <FileDown className="mr-2 h-4 w-4" /> Import
+              </Button>
               <Button variant="outline" onClick={() => router.push('/admin/students/promotions')}>
                 <Users2 className="mr-2 h-4 w-4" /> Promotions
               </Button>
@@ -152,11 +164,11 @@ function StudentsPageContent() {
           </CardHeader>
           <CardContent>
             <div className="mb-4">
-                <Input 
-                    placeholder="Search by name or class..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                />
+              <Input
+                placeholder="Search by name or class..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
             </div>
             <ScrollArea className="h-[calc(100vh-24rem)]">
               <Table>
@@ -174,7 +186,7 @@ function StudentsPageContent() {
                       <TableCell>
                         <div className="flex items-center gap-3">
                           <Avatar className="h-9 w-9">
-                             <AvatarImage src={student.avatar} alt={student.name} />
+                            <AvatarImage src={student.avatar} alt={student.name} />
                             <AvatarFallback>{student.initials}</AvatarFallback>
                           </Avatar>
                           <span className="font-medium">{student.name}</span>
@@ -183,39 +195,39 @@ function StudentsPageContent() {
                       <TableCell>{student.class}</TableCell>
                       <TableCell>
                         <Badge variant="secondary" className={cn(student.status === 'Alumni' && 'bg-muted text-muted-foreground')}>
-                            {student.status || 'Active'}
+                          {student.status || 'Active'}
                         </Badge>
                       </TableCell>
                       <TableCell className="text-right" onClick={e => e.stopPropagation()}>
                         <Button variant="ghost" size="icon" onClick={(e) => handleMessageClick(e, student)}>
                           <MessageCircle className="h-4 w-4" />
                         </Button>
-                         <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                                <Button variant="ghost" size="icon">
-                                    <MoreHorizontal className="h-4 w-4" />
-                                </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end">
-                                <DropdownMenuItem asChild>
-                                    <Link href={`/p/${student.id}`} target="_blank">
-                                        <ExternalLink className="mr-2 h-4 w-4" /> View Public Profile
-                                    </Link>
-                                </DropdownMenuItem>
-                                <DropdownMenuItem onClick={() => router.push(`/admin/reports/${student.id}`)}>
-                                    <FileBarChart className="mr-2 h-4 w-4" />
-                                    View Report Card
-                                </DropdownMenuItem>
-                                <DropdownMenuSeparator />
-                                <DropdownMenuItem onClick={() => handleEditClick(student)}>
-                                    <Edit className="mr-2 h-4 w-4" />
-                                    Edit Profile
-                                </DropdownMenuItem>
-                                <DropdownMenuItem onClick={() => confirmDeleteStudent(student)} className="text-destructive focus:text-destructive">
-                                    <Trash2 className="mr-2 h-4 w-4" />
-                                    Delete
-                                </DropdownMenuItem>
-                            </DropdownMenuContent>
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" size="icon">
+                              <MoreHorizontal className="h-4 w-4" />
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end">
+                            <DropdownMenuItem asChild>
+                              <Link href={`/p/${student.id}`} target="_blank">
+                                <ExternalLink className="mr-2 h-4 w-4" /> View Public Profile
+                              </Link>
+                            </DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => router.push(`/admin/reports/${student.id}`)}>
+                              <FileBarChart className="mr-2 h-4 w-4" />
+                              View Report Card
+                            </DropdownMenuItem>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem onClick={() => handleEditClick(student)}>
+                              <Edit className="mr-2 h-4 w-4" />
+                              Edit Profile
+                            </DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => confirmDeleteStudent(student)} className="text-destructive focus:text-destructive">
+                              <Trash2 className="mr-2 h-4 w-4" />
+                              Delete
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
                         </DropdownMenu>
                       </TableCell>
                     </TableRow>
@@ -223,7 +235,7 @@ function StudentsPageContent() {
                   {!isLoading && filteredStudents.length === 0 && (
                     <TableRow><TableCell colSpan={4} className="text-center h-24">No students found.</TableCell></TableRow>
                   )}
-                   {isLoading && (
+                  {isLoading && (
                     <TableRow><TableCell colSpan={4} className="text-center h-24">Loading students...</TableCell></TableRow>
                   )}
                 </TableBody>
@@ -239,7 +251,7 @@ function StudentsPageContent() {
         onUpdateStudent={handleUpdateStudent}
         studentToEdit={editingStudent}
       />
-       <ConfirmationDialog
+      <ConfirmationDialog
         isOpen={!!studentToDelete}
         onClose={() => setStudentToDelete(null)}
         onConfirm={handleDeleteStudent}
@@ -247,7 +259,7 @@ function StudentsPageContent() {
         description="This action cannot be undone. This will permanently remove the student's record."
         confirmText="Delete"
       />
-      <SendMessageDialog 
+      <SendMessageDialog
         isOpen={!!messagingStudent}
         onClose={() => setMessagingStudent(null)}
         studentName={messagingStudent?.name || ''}
@@ -258,9 +270,9 @@ function StudentsPageContent() {
 }
 
 export default function StudentsPage() {
-    return (
-        <Suspense fallback={<div>Loading...</div>}>
-            <StudentsPageContent />
-        </Suspense>
-    )
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <StudentsPageContent />
+    </Suspense>
+  )
 }

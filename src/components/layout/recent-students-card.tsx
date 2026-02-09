@@ -23,51 +23,50 @@ import * as DataStore from "@/lib/data-store";
 import { SendMessageDialog } from "../admin-dashboard/send-message-dialog";
 
 const SkeletonCard = () => (
-    <Card className="p-6 shadow-lg flex flex-col h-full min-h-[460px]">
-      <CardHeader className="p-0 flex flex-row items-start justify-between">
-        <div className="space-y-2">
-          <Skeleton className="h-6 w-32 rounded-md" />
-          <Skeleton className="h-4 w-24 rounded-md" />
-        </div>
-        <Skeleton className="h-9 w-9 rounded-full" />
-      </CardHeader>
-      <CardContent className="p-0 mt-4 flex-1 min-h-0">
-        <div className="space-y-4">
-          {[...Array(5)].map((_, i) => (
-            <div key={i} className="flex items-center gap-3">
-              <Skeleton className="h-10 w-10 rounded-full" />
-              <div className="flex-1 space-y-1">
-                <Skeleton className="h-4 w-3/4 rounded-md" />
-                <Skeleton className="h-3 w-1/2 rounded-md" />
-              </div>
-              <Skeleton className="h-9 w-9 rounded-lg" />
-            </div>
-          ))}
-        </div>
-      </CardContent>
-      <div className="mt-4">
-        <Skeleton className="h-10 w-full rounded-xl" />
+  <Card className="p-6 shadow-lg flex flex-col h-full min-h-[460px]">
+    <CardHeader className="p-0 flex flex-row items-start justify-between">
+      <div className="space-y-2">
+        <Skeleton className="h-6 w-32 rounded-md" />
+        <Skeleton className="h-4 w-24 rounded-md" />
       </div>
-    </Card>
+      <Skeleton className="h-9 w-9 rounded-full" />
+    </CardHeader>
+    <CardContent className="p-0 mt-4 flex-1 min-h-0">
+      <div className="space-y-4">
+        {[...Array(5)].map((_, i) => (
+          <div key={i} className="flex items-center gap-3">
+            <Skeleton className="h-10 w-10 rounded-full" />
+            <div className="flex-1 space-y-1">
+              <Skeleton className="h-4 w-3/4 rounded-md" />
+              <Skeleton className="h-3 w-1/2 rounded-md" />
+            </div>
+            <Skeleton className="h-9 w-9 rounded-lg" />
+          </div>
+        ))}
+      </div>
+    </CardContent>
+    <div className="mt-4">
+      <Skeleton className="h-10 w-full rounded-xl" />
+    </div>
+  </Card>
 )
 
+import {
+  useGetStudentsQuery,
+  useAddStudentMutation
+} from "@/app/api/apiSlice";
+
 export function RecentStudentsCard() {
-  const [students, setStudents] = useState<Student[]>([]);
-  const [dataLoaded, setDataLoaded] = useState(false);
+  const { data: studentsResponse, isLoading: isGetLoading } = useGetStudentsQuery({});
+  const [addStudent] = useAddStudentMutation();
   const [, setAdminNotifications] = useLocalStorage<Notification[]>("admin-notifications", initialAdminNotifications);
   const [isAddStudentOpen, setIsAddStudentOpen] = useState(false);
   const { plan, planLimits, hasFeature, openUpgradeDialog, isLoading: isPlanLoading } = usePlan();
   const [messagingStudent, setMessagingStudent] = useState<Student | null>(null);
   const router = useRouter();
 
-  useEffect(() => {
-    const fetchData = async () => {
-        const storedStudents = await DataStore.getStudents();
-        setStudents(storedStudents);
-        setDataLoaded(true);
-    };
-    fetchData();
-  }, []);
+  const students = studentsResponse?.data || [];
+  const dataLoaded = !isGetLoading;
 
   if (isPlanLoading || !dataLoaded || !plan) {
     return <SkeletonCard />;
@@ -76,18 +75,24 @@ export function RecentStudentsCard() {
   const canAddStudent = hasFeature('STUDENT_PROFILES') && students.length < planLimits[plan].students;
 
   const handleAddStudent = async (newStudentData: Omit<Student, 'id' | 'avatar' | 'initials' | 'status'>) => {
-    const newStudent = await DataStore.addStudent(newStudentData);
-    setStudents(prev => [newStudent, ...prev]);
+    try {
+      const result = await addStudent(newStudentData).unwrap();
+      const newStudent = result.data;
 
-    const newNotification: Notification = {
+      const newNotification: Notification = {
         id: Date.now(),
         title: "New Student Enrolled",
         description: `${newStudent.name} was added to ${newStudent.class}.`,
         icon: "UserPlus",
         read: false,
         href: `/admin/students/${newStudent.id}`
-    };
-    setAdminNotifications(prev => [newNotification, ...prev]);
+      };
+      setAdminNotifications(prev => [newNotification, ...prev]);
+      return newStudent;
+    } catch (err) {
+      console.error('Failed to add student in RecentStudentsCard:', err);
+      throw err;
+    }
   }
 
   const handleAddClick = () => {
@@ -100,63 +105,63 @@ export function RecentStudentsCard() {
 
   return (
     <>
-    <Card className="p-6 shadow-lg flex flex-col h-full min-h-[460px]">
-      <CardHeader className="p-0 flex flex-row items-start justify-between">
-        <div>
-          <h3 className="text-lg font-semibold tracking-tight">Recent Students</h3>
-          <div className="text-xs text-muted-foreground mt-1">
-            {students.length} / {planLimits[plan].students === Infinity ? 'Unlimited' : planLimits[plan].students} students
+      <Card className="p-6 shadow-lg flex flex-col h-full min-h-[460px]">
+        <CardHeader className="p-0 flex flex-row items-start justify-between">
+          <div>
+            <h3 className="text-lg font-semibold tracking-tight">Recent Students</h3>
+            <div className="text-xs text-muted-foreground mt-1">
+              {students.length} / {planLimits[plan].students === Infinity ? 'Unlimited' : planLimits[plan].students} students
             </div>
-        </div>
-        <button 
-          onClick={handleAddClick}
-          disabled={!canAddStudent && plan !== 'Starter'}
-          className="h-9 w-9 rounded-full grid place-items-center bg-primary text-primary-foreground transition-colors hover:bg-primary/80 shrink-0 disabled:bg-muted-foreground disabled:cursor-not-allowed">
-          <Plus className="h-4 w-4" />
-        </button>
-      </CardHeader>
-      <CardContent className="p-0 mt-4 flex-1 min-h-0">
-        <ScrollArea className="h-full pr-4 -mr-4">
-          <div className="space-y-4">
-            {students.slice(0, 5).map(student => (
-              <div key={student.id} className="flex items-center gap-3">
-                <Avatar className="h-10 w-10 shrink-0">
-                  <AvatarImage src={student.avatar} alt={student.name} />
-                  <AvatarFallback>{student.initials}</AvatarFallback>
-                </Avatar>
-                <div className="flex-1 min-w-0">
-                  <div className="text-sm font-medium tracking-tight truncate">{student.name}</div>
-                  <div className="text-xs text-muted-foreground">{student.class}</div>
-                </div>
-                <Button variant="ghost" size="icon" className="h-9 w-9 rounded-lg shrink-0" onClick={() => setMessagingStudent(student)}>
-                  <MessageCircle className="h-4 w-4" />
-                </Button>
-              </div>
-            ))}
-             {students.length === 0 && (
-              <div className="text-center text-sm text-muted-foreground pt-12">
-                No students enrolled yet.
-              </div>
-            )}
           </div>
-        </ScrollArea>
-      </CardContent>
-      <div className="mt-4">
+          <button
+            onClick={handleAddClick}
+            disabled={!canAddStudent && plan !== 'Starter'}
+            className="h-9 w-9 rounded-full grid place-items-center bg-primary text-primary-foreground transition-colors hover:bg-primary/80 shrink-0 disabled:bg-muted-foreground disabled:cursor-not-allowed">
+            <Plus className="h-4 w-4" />
+          </button>
+        </CardHeader>
+        <CardContent className="p-0 mt-4 flex-1 min-h-0">
+          <ScrollArea className="h-full pr-4 -mr-4">
+            <div className="space-y-4">
+              {students.slice(0, 5).map(student => (
+                <div key={student.id} className="flex items-center gap-3">
+                  <Avatar className="h-10 w-10 shrink-0">
+                    <AvatarImage src={student.avatar} alt={student.name} />
+                    <AvatarFallback>{student.initials}</AvatarFallback>
+                  </Avatar>
+                  <div className="flex-1 min-w-0">
+                    <div className="text-sm font-medium tracking-tight truncate">{student.name}</div>
+                    <div className="text-xs text-muted-foreground">{student.class}</div>
+                  </div>
+                  <Button variant="ghost" size="icon" className="h-9 w-9 rounded-lg shrink-0" onClick={() => setMessagingStudent(student)}>
+                    <MessageCircle className="h-4 w-4" />
+                  </Button>
+                </div>
+              ))}
+              {students.length === 0 && (
+                <div className="text-center text-sm text-muted-foreground pt-12">
+                  No students enrolled yet.
+                </div>
+              )}
+            </div>
+          </ScrollArea>
+        </CardContent>
+        <div className="mt-4">
           <Button asChild variant="outline" className="w-full">
             <Link href="/admin/students">
               View More
             </Link>
           </Button>
-      </div>
-    </Card>
-    <AddStudentDialog 
-      isOpen={isAddStudentOpen} 
-      onClose={() => setIsAddStudentOpen(false)}
-      onAddStudent={handleAddStudent}
-      onUpdateStudent={() => {}}
-      studentToEdit={null}
-    />
-     <SendMessageDialog 
+        </div>
+      </Card>
+      <AddStudentDialog
+        isOpen={isAddStudentOpen}
+        onClose={() => setIsAddStudentOpen(false)}
+        onAddStudent={handleAddStudent}
+        onUpdateStudent={() => { }}
+        studentToEdit={null}
+      />
+      <SendMessageDialog
         isOpen={!!messagingStudent}
         onClose={() => setMessagingStudent(null)}
         studentName={messagingStudent?.name || ''}
