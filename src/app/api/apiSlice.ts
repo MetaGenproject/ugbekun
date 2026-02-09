@@ -25,6 +25,7 @@ export const apiSlice = createApi({
   
     credentials: 'include', // Enable cookies to be sent with requests
 
+
     prepareHeaders: (headers) => {
       const token = getToken();
       // Only set Authorization header if token exists in localStorage (backward compatibility)
