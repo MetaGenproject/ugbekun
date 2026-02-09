@@ -15,14 +15,13 @@ const getToken = () => {
 export const apiSlice = createApi({
   reducerPath: 'api',
   baseQuery: fetchBaseQuery({
+
+    //for production
     //https://ugbekunsmp-backend.onrender.com/
-
-    // http://localhost:5001/
-    baseUrl: "https://ugbekunsmp-backend.onrender.com/",
+    //for development
     //http://localhost:5001/
-
-
-  
+    baseUrl: "https://ugbekunsmp-backend.onrender.com/",
+    
     credentials: 'include', // Enable cookies to be sent with requests
 
 
@@ -110,7 +109,6 @@ export const apiSlice = createApi({
       query: (schoolId) => `api/onboarding/schools/${schoolId}/status`,
       providesTags: ["OnboardingStatus"],
     }),
-
     createBulkUsers: builder.mutation({
       query: ({ schoolId, users }) => ({
         url: `api/onboarding/schools/${schoolId}/users/bulk`,
