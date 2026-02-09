@@ -16,18 +16,11 @@ export const apiSlice = createApi({
   reducerPath: 'api',
   baseQuery: fetchBaseQuery({
     //https://ugbekunsmp-backend.onrender.com/
-<<<<<<< HEAD
-    // http://localhost:5001/
+
     baseUrl: "https://ugbekunsmp-backend.onrender.com/",
-=======
-    //http://localhost:5001/
-<<<<<<< HEAD
-    baseUrl: "https://ugbekunsmp-backend.onrender.com/", 
->>>>>>> 56b11db (update the apislice)
-=======
-    baseUrl: "http://localhost:5001",
+
     credentials: 'include', // Enable cookies to be sent with requests
->>>>>>> 9b74db9 (fix the superadmin and admin side)
+
     prepareHeaders: (headers) => {
       const token = getToken();
       // Only set Authorization header if token exists in localStorage (backward compatibility)
