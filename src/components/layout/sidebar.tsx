@@ -110,7 +110,7 @@ export function SidebarContent({ schoolData }: { schoolData?: any }) {
                     </div>
                     <div className="min-w-0">
                         <div className="font-semibold tracking-tight text-white truncate">
-                            {schoolData?.schoolName || "Unity College"}
+                            {schoolData ? schoolData.schoolName : "Authenticating..."}
                         </div>
                         <div className="text-xs text-ugbekun-blue-light/70 flex items-center gap-1.5">
                             Admin Portal

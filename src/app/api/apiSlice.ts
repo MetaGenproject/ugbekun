@@ -20,8 +20,8 @@ export const apiSlice = createApi({
     //https://ugbekunsmp-backend.onrender.com/
     //for development
     //http://localhost:5001/
-    baseUrl: "https://ugbekunsmp-backend.onrender.com/",
-    
+    baseUrl: process.env.NEXT_PUBLIC_API_URL || "http://localhost:5001",
+
     credentials: 'include', // Enable cookies to be sent with requests
 
 
@@ -76,6 +76,13 @@ export const apiSlice = createApi({
     getMe: builder.query({
       query: () => 'api/auth/me',
       providesTags: ["CurrentUser"],
+    }),
+
+    logout: builder.mutation({
+      query: () => ({
+        url: 'api/auth/logout',
+        method: 'POST',
+      }),
     }),
 
     signup: builder.mutation({
@@ -259,6 +266,7 @@ export const apiSlice = createApi({
 
 export const {
   useLoginMutation,
+  useLogoutMutation,
   useGetMeQuery,
   useSignupMutation,
   useCompleteOnboardingMutation,

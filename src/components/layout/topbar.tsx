@@ -44,6 +44,9 @@ import { useSidebar } from "../ui/sidebar";
 import { LogoIcon } from "../logo-icon";
 import { useTheme } from "next-themes";
 import { HelpDrawer } from "./help-drawer";
+import { useLogoutMutation, apiSlice } from "@/app/api/apiSlice";
+import { useAppDispatch } from "@/app/hooks";
+import { logOut as logOutAction } from "@/app/features/auth/authSlice";
 
 type AppTopbarProps = {
   userRole: 'super-admin' | 'admin' | 'teacher' | 'parent' | 'student';
@@ -72,13 +75,25 @@ export function AppTopbar({ userRole, navItems, userDetails, searchPlaceholders,
   const { plan: contextPlan } = usePlan();
   const [schools] = useLocalStorage<School[]>('schools', schoolsData);
 
-  const schoolName = schoolData?.schoolName || schools[0]?.name || "Your School";
+  const schoolName = schoolData?.schoolName || "";
   const plan = schoolData?.plan || contextPlan;
 
-  const handleLogout = () => {
-    localStorage.removeItem('isLoggedIn');
-    localStorage.removeItem('userRole');
-    showPreloader('/login');
+  const [logout] = useLogoutMutation();
+  const dispatch = useAppDispatch();
+
+  const handleLogout = async () => {
+    try {
+      await logout({}).unwrap();
+    } catch (err) {
+      console.error('Logout failed:', err);
+    } finally {
+      dispatch(logOutAction());
+      dispatch(apiSlice.util.resetApiState());
+      localStorage.removeItem('isLoggedIn');
+      localStorage.removeItem('userRole');
+      localStorage.removeItem('token');
+      showPreloader('/login');
+    }
   }
 
   const handleAiCommand = (prompt: string) => {

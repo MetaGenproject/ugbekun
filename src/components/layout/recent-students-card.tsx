@@ -124,7 +124,7 @@ export function RecentStudentsCard() {
           <ScrollArea className="h-full pr-4 -mr-4">
             <div className="space-y-4">
               {students.slice(0, 5).map(student => (
-                <div key={student.id} className="flex items-center gap-3">
+                <div key={student.id || (student as any)._id} className="flex items-center gap-3">
                   <Avatar className="h-10 w-10 shrink-0">
                     <AvatarImage src={student.avatar} alt={student.name} />
                     <AvatarFallback>{student.initials}</AvatarFallback>
