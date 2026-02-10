@@ -17,10 +17,12 @@ export const apiSlice = createApi({
   baseQuery: fetchBaseQuery({
 
     //for production
-    //https://ugbekunsmp-backend.onrender.com/
+    baseUrl: "https://ugbekunsmp-backend.onrender.com/",
+
+
     //for development
     //http://localhost:5001/
-    baseUrl: process.env.NEXT_PUBLIC_API_URL || "http://localhost:5001",
+    // baseUrl: process.env.NEXT_PUBLIC_API_URL || "http://localhost:5001",
 
     credentials: 'include', // Enable cookies to be sent with requests
 
